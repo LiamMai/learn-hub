@@ -1,0 +1,123 @@
+<div class="max-w-[1200px] mx-auto w-full px-8 py-8 flex gap-10">
+  <article class="max-w-[720px] flex-1 space-y-10">
+    <div class="flex items-center gap-2 text-sm text-outline">
+      <a routerLink="/learn" class="hover:text-primary transition-colors">Learn</a>
+      <span>/</span>
+      <span class="text-on-surface font-bold">Context API</span>
+    </div>
+
+    <header class="space-y-3">
+      <div class="flex items-center gap-3 text-xs font-bold">
+        <span class="px-2.5 py-1 rounded-full bg-primary-container text-on-primary-container uppercase">
+          React Intermediate
+        </span>
+        <span class="text-outline">12 min read</span>
+      </div>
+      <h1 class="text-3xl font-bold text-on-surface">State Management with Context API</h1>
+      <p class="text-on-surface-variant">
+        Share state across a component tree without prop-drilling — and know when not to.
+      </p>
+    </header>
+
+    <section id="core-concepts" class="space-y-3 scroll-mt-24">
+      <h2 class="text-xl font-bold text-on-surface">Core Concepts</h2>
+      <p class="text-on-surface-variant leading-relaxed">
+        Context lets a value flow down a component tree without passing it through every
+        intermediate component's props. A <code class="font-code text-sm">Provider</code>
+        publishes a value; any descendant can read it with
+        <code class="font-code text-sm">useContext</code>, no matter how deeply nested.
+      </p>
+    </section>
+
+    <section id="architecture" class="space-y-3 scroll-mt-24">
+      <h2 class="text-xl font-bold text-on-surface">Architecture</h2>
+      <p class="text-on-surface-variant leading-relaxed">
+        A typical setup pairs one <code class="font-code text-sm">createContext</code> call with
+        a Provider component that owns the actual state, and a custom hook (like
+        <code class="font-code text-sm">useAuth</code> below) that reads the context and throws
+        a clear error if it's used outside the Provider.
+      </p>
+    </section>
+
+    <section id="lifecycle" class="space-y-3 scroll-mt-24">
+      <h2 class="text-xl font-bold text-on-surface">Lifecycle</h2>
+      <p class="text-on-surface-variant leading-relaxed">
+        Every consumer re-renders whenever the Provider's value changes — even if a component
+        only reads one field off a larger object. Memoizing the value
+        (<code class="font-code text-sm">useMemo</code>) avoids creating a new object on every
+        render and re-rendering consumers unnecessarily.
+      </p>
+    </section>
+
+    <section id="common-use-cases" class="space-y-3 scroll-mt-24">
+      <h2 class="text-xl font-bold text-on-surface">Common Use Cases</h2>
+      <p class="text-on-surface-variant leading-relaxed">
+        Theme, authenticated user, locale, and feature flags are classic fits — values that
+        many distant components need but that change rarely. Frequently-changing, high-frequency
+        state (like a text input's value) usually belongs in local state, not Context.
+      </p>
+    </section>
+
+    <section id="implementation-guide" class="space-y-3 scroll-mt-24">
+      <h2 class="text-xl font-bold text-on-surface">Implementation Guide</h2>
+      <p class="text-on-surface-variant leading-relaxed">
+        Here's a minimal auth context: a Provider owning the user state, and a hook that reads it.
+      </p>
+      <app-code-block [code]="code" filename="auth-context.tsx" />
+    </section>
+
+    <section id="best-practices" class="space-y-3 scroll-mt-24">
+      <h2 class="text-xl font-bold text-on-surface">Best Practices</h2>
+      <p class="text-on-surface-variant leading-relaxed">
+        Keep each Context focused on one concern rather than one giant "app state" context —
+        it keeps re-renders scoped and makes each Provider easy to reason about in isolation.
+      </p>
+    </section>
+
+    <section class="bg-surface-container-lowest border border-surface-variant rounded-2xl p-6 space-y-3">
+      <h2 class="text-lg font-bold text-on-surface">Learning Checkpoint</h2>
+      @for (item of checkpoint(); track $index) {
+        <app-checklist-item
+          [label]="
+            $index === 0
+              ? 'Explain when Context re-renders consumers'
+              : $index === 1
+                ? 'Write a Provider + custom hook pair'
+                : 'Know when to reach for a state library instead'
+          "
+          [checked]="item"
+          (toggled)="toggleCheckpoint($index)"
+        />
+      }
+    </section>
+  </article>
+
+  <aside class="hidden xl:block w-72 shrink-0">
+    <div class="sticky top-24 space-y-6">
+      <nav class="space-y-1">
+        <p class="text-xs font-bold uppercase text-outline mb-2">On this page</p>
+        @for (entry of toc; track entry.id) {
+          <button
+            type="button"
+            (click)="scrollToSection(entry.id)"
+            class="block w-full text-left px-3 py-1.5 rounded-lg text-sm border-l-2 transition-colors"
+            [class.text-primary]="activeSection() === entry.id"
+            [class.font-bold]="activeSection() === entry.id"
+            [class.border-primary]="activeSection() === entry.id"
+            [class.text-on-surface-variant]="activeSection() !== entry.id"
+            [class.border-transparent]="activeSection() !== entry.id"
+          >
+            {{ entry.label }}
+          </button>
+        }
+      </nav>
+      <div class="bg-primary-container/20 border border-primary-container rounded-xl p-4">
+        <p class="text-xs font-bold uppercase text-primary mb-1">Pro Tip</p>
+        <p class="text-sm text-on-surface-variant">
+          Split read-heavy and write-heavy state into separate contexts to avoid
+          over-rendering consumers that only need to read.
+        </p>
+      </div>
+    </div>
+  </aside>
+</div>

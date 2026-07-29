@@ -1,0 +1,113 @@
+<aside
+  class="hidden md:flex flex-col fixed left-0 top-0 h-screen w-64 p-3 gap-1 bg-surface-container-low border-r border-outline-variant z-40"
+>
+  <div class="flex items-center gap-2 px-2 py-4">
+    <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-on-primary">
+      <span class="material-symbols-outlined">terminal</span>
+    </div>
+    <div>
+      <h1 class="text-lg font-extrabold text-primary">DevHub</h1>
+      <p class="text-xs text-on-surface-variant">Learning Portal</p>
+    </div>
+  </div>
+
+  <nav class="flex-1 space-y-1">
+    @for (item of navItems; track item.label) {
+      <a
+        [routerLink]="item.route"
+        routerLinkActive="bg-secondary-container text-on-secondary-container font-bold"
+        [routerLinkActiveOptions]="{ exact: item.route === '/' }"
+        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:translate-x-1 transition-transform duration-200"
+      >
+        <span class="material-symbols-outlined">{{ item.icon }}</span>
+        <span>{{ item.label }}</span>
+      </a>
+    }
+  </nav>
+
+  @if (showUpgradeCta()) {
+    <div class="p-2">
+      <button
+        type="button"
+        class="w-full py-2.5 px-4 rounded-lg bg-primary text-on-primary font-bold text-sm"
+      >
+        Upgrade to Pro
+      </button>
+    </div>
+  }
+
+  <div class="p-2">
+    <button
+      type="button"
+      (click)="themeService.toggle()"
+      class="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-lg border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary transition-all text-sm font-bold"
+    >
+      <span class="material-symbols-outlined text-[18px]">
+        {{ themeService.theme() === 'dark' ? 'light_mode' : 'dark_mode' }}
+      </span>
+      {{ themeService.theme() === 'dark' ? 'Light mode' : 'Dark mode' }}
+    </button>
+  </div>
+</aside>
+
+<main class="md:ml-64 min-h-screen flex flex-col">
+  <header
+    class="flex justify-between items-center w-full px-6 h-16 sticky top-0 z-50 bg-surface-container-lowest border-b border-outline-variant"
+  >
+    <div class="relative w-full max-w-md">
+      <span
+        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]"
+        >search</span
+      >
+      <input
+        class="w-full pl-10 pr-4 py-2 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary transition-all text-sm"
+        placeholder="Search topics, languages, frameworks..."
+        type="text"
+      />
+    </div>
+    <div class="flex items-center gap-3">
+      <button type="button" class="p-2 text-on-surface-variant hover:text-primary transition-all">
+        <span class="material-symbols-outlined">notifications</span>
+      </button>
+      <div
+        class="w-9 h-9 rounded-full border-2 border-primary-container bg-primary-container flex items-center justify-center text-on-primary-container text-sm font-bold"
+      >
+        D
+      </div>
+    </div>
+  </header>
+
+  <div class="flex-1">
+    <router-outlet></router-outlet>
+  </div>
+
+  <footer class="w-full py-6 px-6 flex flex-col md:flex-row justify-between items-center gap-2 bg-surface-container border-t border-outline-variant">
+    <p class="text-sm text-secondary">&copy; 2026 DevHub Learning Platform</p>
+    <div class="flex gap-4 text-sm text-on-surface-variant">
+      <a class="hover:text-on-surface transition-colors" href="#">Privacy Policy</a>
+      <a class="hover:text-on-surface transition-colors" href="#">Terms of Service</a>
+      <a class="hover:text-on-surface transition-colors" href="#">Cookie Policy</a>
+    </div>
+  </footer>
+</main>
+
+<nav
+  class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-surface-container-lowest border-t border-outline-variant flex items-center justify-around z-50"
+>
+  <a routerLink="/" class="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant">
+    <span class="material-symbols-outlined">home</span>
+    Home
+  </a>
+  <a routerLink="/topics" class="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant">
+    <span class="material-symbols-outlined">category</span>
+    Topics
+  </a>
+  <a routerLink="/learn" class="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant">
+    <span class="material-symbols-outlined">school</span>
+    Learn
+  </a>
+  <a routerLink="/settings" class="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant">
+    <span class="material-symbols-outlined">settings</span>
+    Settings
+  </a>
+</nav>

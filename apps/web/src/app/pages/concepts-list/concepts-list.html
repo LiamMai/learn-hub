@@ -1,0 +1,61 @@
+<div class="p-8 max-w-[900px] mx-auto w-full space-y-8">
+  <div class="flex items-center gap-2 text-sm text-outline">
+    <a routerLink="/learn" class="hover:text-primary transition-colors">Learn</a>
+    <span>/</span>
+    <span class="text-on-surface font-bold">{{ topic()?.title }}</span>
+  </div>
+
+  @if (loading()) {
+    <p class="text-on-surface-variant">Loading concepts&hellip;</p>
+  } @else if (error()) {
+    <p class="text-error">{{ error() }}</p>
+  } @else {
+    <header class="space-y-2">
+      @if (categoryMeta(); as meta) {
+        <p class="text-xs font-bold uppercase" [style.color]="meta.color">{{ meta.label }}</p>
+      }
+      <h1 class="text-2xl font-bold text-on-surface">{{ topic()?.title }}</h1>
+      @if (topic()?.sourceDocUrl) {
+        <a
+          [href]="topic()?.sourceDocUrl"
+          target="_blank"
+          rel="noopener"
+          class="inline-block text-sm text-on-surface-variant border-b border-outline-variant hover:text-primary hover:border-primary transition-colors"
+        >
+          original doc &#8599;
+        </a>
+      }
+    </header>
+
+    @if (concepts().length === 0) {
+      <app-empty-state
+        icon="menu_book"
+        title="No concepts yet"
+        description="Nothing has been filed under this topic yet."
+      />
+    } @else {
+      <div class="space-y-6">
+        @for (concept of concepts(); track concept._id) {
+          <article class="bg-surface-container-lowest border border-surface-variant rounded-2xl p-6 space-y-3">
+            <div class="flex items-center gap-3 flex-wrap">
+              <h2 class="text-lg font-bold text-on-surface">{{ concept.title }}</h2>
+              <app-pill
+                [label]="difficultyMeta(concept).label"
+                [color]="difficultyMeta(concept).color"
+              />
+            </div>
+            <p class="text-on-surface-variant">{{ concept.shortExplain }}</p>
+            @if (concept.originalQuote) {
+              <blockquote class="border-l-2 border-outline-variant pl-4 italic text-on-surface-variant">
+                &ldquo;{{ concept.originalQuote }}&rdquo;
+              </blockquote>
+            }
+            @if (concept.codeExample) {
+              <app-code-block [code]="concept.codeExample" />
+            }
+          </article>
+        }
+      </div>
+    }
+  }
+</div>

@@ -1,0 +1,104 @@
+@if (challenge(); as ch) {
+  <div class="h-full flex flex-col overflow-hidden">
+    <div class="flex items-center justify-between px-6 py-3 border-b border-outline-variant shrink-0">
+      <div>
+        <h1 class="font-bold text-on-surface">{{ ch.title }}</h1>
+        <p class="text-xs text-outline">{{ ch.topicLabel }}</p>
+      </div>
+      <div class="hidden sm:block w-40">
+        <p class="text-xs text-outline mb-1">{{ ch.progressLabel }}</p>
+        <app-progress-bar [value]="ch.sessionProgress" />
+      </div>
+      <div class="flex gap-2">
+        <button
+          type="button"
+          (click)="runCode()"
+          class="px-4 py-2 rounded-xl border border-outline-variant text-sm font-bold hover:border-primary hover:text-primary transition-colors"
+        >
+          Run Code
+        </button>
+        <button type="button" class="px-4 py-2 rounded-xl bg-primary text-on-primary text-sm font-bold">
+          Submit
+        </button>
+      </div>
+    </div>
+
+    <div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+      <!-- Left: instructions + editor -->
+      <div class="lg:w-1/2 flex flex-col border-r border-outline-variant overflow-y-auto p-6 space-y-4">
+        <div class="space-y-2">
+          <h2 class="font-bold text-sm text-on-surface uppercase">Instructions</h2>
+          <ul class="space-y-2">
+            @for (req of ch.requirements; track req) {
+              <li class="flex items-start gap-2 text-sm text-on-surface-variant">
+                <span class="material-symbols-outlined text-[16px] text-primary mt-0.5">check_circle</span>
+                {{ req }}
+              </li>
+            }
+          </ul>
+        </div>
+
+        <div class="rounded-xl overflow-hidden border border-outline-variant flex-1">
+          <div class="flex items-center justify-between px-4 py-2 bg-surface-container-high border-b border-outline-variant">
+            <span class="text-xs font-code text-on-surface-variant">timer-hook.ts</span>
+            <span class="material-symbols-outlined text-[16px] text-on-surface-variant">settings</span>
+          </div>
+          <pre class="m-0 p-4 bg-surface-container-lowest overflow-x-auto"><code class="font-code text-sm text-on-surface">{{ ch.starterCode }}<span class="inline-block w-2 h-4 bg-primary animate-pulse align-middle"></span></code></pre>
+        </div>
+      </div>
+
+      <!-- Right: preview + console -->
+      <div class="lg:w-1/2 flex flex-col overflow-y-auto p-6 space-y-4">
+        <div class="bg-surface-container-lowest border border-surface-variant rounded-2xl p-6 flex flex-col items-center justify-center gap-4">
+          <div
+            class="w-32 h-32 rounded-full border-4 flex items-center justify-center"
+            [class.border-primary]="running()"
+            [class.border-outline-variant]="!running()"
+            [class.animate-spin]="running()"
+          >
+            <span class="text-3xl font-black text-on-surface">{{ counter() }}</span>
+          </div>
+          <p class="text-xs font-bold uppercase text-outline">Seconds Elapsed</p>
+          <div class="flex gap-2">
+            <button
+              type="button"
+              (click)="reset()"
+              class="px-4 py-1.5 rounded-lg border border-outline-variant text-sm font-bold"
+            >
+              Reset
+            </button>
+            <button
+              type="button"
+              (click)="pause()"
+              class="px-4 py-1.5 rounded-lg border border-outline-variant text-sm font-bold"
+            >
+              Pause
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-[#0e1416] rounded-2xl border border-outline-variant flex-1 flex flex-col overflow-hidden min-h-[200px]">
+          <div class="flex items-center justify-between px-4 py-2 border-b border-white/10">
+            <span class="text-xs font-code text-white/60">Console Output</span>
+            <button type="button" (click)="clearConsole()" class="text-xs text-white/60 hover:text-white">
+              Clear
+            </button>
+          </div>
+          <div class="flex-1 overflow-y-auto p-3 space-y-1 font-code text-xs">
+            @for (log of logs(); track $index) {
+              <p
+                [ngClass]="{
+                  'text-white/60': log.type === 'System',
+                  'text-green-400': log.type === 'Success',
+                  'text-blue-300': log.type === 'Log'
+                }"
+              >
+                [{{ log.timestamp }}] {{ log.type }}: {{ log.message }}
+              </p>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}

@@ -21,7 +21,7 @@
             "input": "apps/web/public"
           }
         ],
-        "styles": ["apps/web/src/styles.scss"]
+        "styles": ["apps/web/src/styles.css"]
       },
       "configurations": {
         "production": {
@@ -50,6 +50,9 @@
       "continuous": true,
       "executor": "@angular/build:dev-server",
       "defaultConfiguration": "development",
+      "options": {
+        "proxyConfig": "apps/web/proxy.conf.json"
+      },
       "configurations": {
         "production": {
           "buildTarget": "web:build:production"

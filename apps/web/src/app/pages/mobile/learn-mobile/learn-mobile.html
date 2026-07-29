@@ -1,0 +1,25 @@
+<div class="px-4 space-y-5">
+  <div>
+    <h1 class="text-xl font-bold text-on-surface">Level Up</h1>
+    <p class="text-sm text-on-surface-variant">Browse frameworks and languages.</p>
+  </div>
+
+  <app-filter-chip-group [options]="filterOptions()" [(selected)]="selectedFilter" />
+
+  @if (loading()) {
+    <p class="text-on-surface-variant text-sm">Loading&hellip;</p>
+  } @else {
+    <div class="space-y-3">
+      @for (card of cards(); track card.id) {
+        <a [routerLink]="card.routerLink" class="block">
+          <app-course-card
+            [title]="card.title"
+            [description]="card.description"
+            [categoryLabel]="card.categoryLabel"
+            [categoryColor]="card.categoryColor"
+          />
+        </a>
+      }
+    </div>
+  }
+</div>

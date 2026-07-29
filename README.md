@@ -40,8 +40,22 @@ pnpm start              # brings up MongoDB via Docker, then serves api + web
 | `pnpm docker:down`   | Stop the MongoDB container                          |
 | `pnpm docker:down:v` | Stop the container and delete its data volume       |
 | `pnpm docker:logs`   | Tail MongoDB logs                                   |
+| `pnpm reset`         | Kill stray dev-server processes/ports and reset the Nx daemon |
 
 Any other Nx target works as usual: `pnpm exec nx <target> <project>`, e.g. `pnpm exec nx lint api`, `pnpm exec nx typecheck web`.
+
+## Troubleshooting
+
+**`pnpm start` hangs on `api:serve:development` / "Running in another Nx process..."**
+
+This happens when a previous `pnpm start` was stopped uncleanly (killed terminal, closed window) instead of a plain Ctrl+C — the Nx daemon still thinks that serve task is running and the new one waits forever. Fix:
+
+```sh
+pnpm reset
+pnpm start
+```
+
+Always stop `pnpm start` with Ctrl+C in its own terminal to avoid this in the first place.
 
 ## Environment variables
 

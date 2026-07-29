@@ -1,0 +1,106 @@
+<div class="min-h-screen flex flex-col items-center justify-center bg-background px-4 py-12">
+  <div class="w-full max-w-sm space-y-8">
+    <div class="text-center space-y-2">
+      <div class="w-12 h-12 mx-auto bg-primary rounded-xl flex items-center justify-center text-on-primary">
+        <span class="material-symbols-outlined">terminal</span>
+      </div>
+      <h1 class="text-2xl font-bold text-on-surface">DevHub</h1>
+      <p class="text-sm text-on-surface-variant">The engineering portal for continuous growth.</p>
+    </div>
+
+    <div class="bg-surface-container-lowest border border-surface-variant rounded-2xl p-6 space-y-5">
+      <button
+        type="button"
+        (click)="onGoogleSignIn()"
+        class="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-outline-variant font-bold text-sm hover:bg-surface-container transition-colors"
+      >
+        <span class="material-symbols-outlined text-[18px]">login</span>
+        Login with Google
+      </button>
+
+      <div class="flex items-center gap-3">
+        <div class="flex-1 h-px bg-outline-variant"></div>
+        <span class="text-xs text-outline">or email</span>
+        <div class="flex-1 h-px bg-outline-variant"></div>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-on-surface-variant mb-1.5" for="email">Work Email</label>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">
+              mail
+            </span>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              class="w-full pl-10 pr-4 py-2.5 bg-surface-container rounded-xl border-none focus:ring-2 focus:ring-primary text-sm"
+              placeholder="you@company.com"
+            />
+          </div>
+          @if (form.controls.email.invalid && form.controls.email.touched) {
+            <p class="text-xs text-error mt-1">Enter a valid email address.</p>
+          }
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="block text-xs font-bold text-on-surface-variant" for="password">Password</label>
+            <a routerLink="/coming-soon" class="text-xs text-primary hover:underline">Forgot Password?</a>
+          </div>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">
+              lock
+            </span>
+            <input
+              id="password"
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="password"
+              class="w-full pl-10 pr-10 py-2.5 bg-surface-container rounded-xl border-none focus:ring-2 focus:ring-primary text-sm"
+              placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+            />
+            <button
+              type="button"
+              (click)="togglePasswordVisibility()"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-outline"
+            >
+              <span class="material-symbols-outlined text-[18px]">
+                {{ showPassword() ? 'visibility_off' : 'visibility' }}
+              </span>
+            </button>
+          </div>
+          @if (form.controls.password.invalid && form.controls.password.touched) {
+            <p class="text-xs text-error mt-1">Password must be at least 8 characters.</p>
+          }
+        </div>
+
+        <label class="flex items-center gap-2 text-sm text-on-surface-variant">
+          <input type="checkbox" formControlName="remember" class="rounded" />
+          Remember this device
+        </label>
+
+        <button
+          type="submit"
+          [disabled]="submitting()"
+          class="w-full bg-primary text-on-primary py-2.5 rounded-xl font-bold text-sm disabled:opacity-60 transition-all"
+        >
+          {{ submitting() ? 'Authenticating...' : 'Continue to Dashboard' }}
+        </button>
+      </form>
+    </div>
+
+    <p class="text-center text-sm text-on-surface-variant">
+      New to DevHub?
+      <a routerLink="/coming-soon" class="text-primary font-bold hover:underline">Create an account</a>
+    </p>
+
+    <div class="flex items-center justify-center gap-4 text-xs text-outline opacity-70">
+      <span>SAML/SSO Ready</span>
+      <span>&middot;</span>
+      <span>AES-256 Encrypted</span>
+      <span>&middot;</span>
+      <span>SOC2 Compliant</span>
+    </div>
+  </div>
+</div>

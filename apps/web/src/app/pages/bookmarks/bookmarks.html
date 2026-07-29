@@ -1,0 +1,152 @@
+<div class="p-8 max-w-[1200px] mx-auto w-full space-y-8">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-on-surface">Bookmarks</h1>
+      <p class="text-on-surface-variant text-sm">Saved lessons, code snippets, and interview questions.</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- Lessons -->
+    <section class="lg:col-span-8 space-y-4">
+      <div class="flex items-center gap-2">
+        <h2 class="text-lg font-bold text-on-surface">Lessons</h2>
+        <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant">
+          {{ lessons().length }} Saved
+        </span>
+      </div>
+      @if (lessons().length === 0) {
+        <app-empty-state icon="bookmark" title="No saved lessons" />
+      } @else {
+        <div class="space-y-3">
+          @for (lesson of lessons(); track lesson.id) {
+            <div
+              class="group bg-surface-container-lowest border border-surface-variant rounded-2xl p-4 flex items-start justify-between gap-4 transition-all duration-200"
+              [class.opacity-0]="isRemoving(lesson.id)"
+              [class.scale-95]="isRemoving(lesson.id)"
+            >
+              <div>
+                <h3 class="font-bold text-on-surface mb-1">{{ lesson.title }}</h3>
+                <p class="text-sm text-on-surface-variant mb-2">{{ lesson.description }}</p>
+                <div class="flex gap-2">
+                  @for (tag of lesson.tags; track tag) {
+                    <span class="text-xs px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant">
+                      {{ tag }}
+                    </span>
+                  }
+                </div>
+              </div>
+              <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                <button
+                  type="button"
+                  title="Share"
+                  (click)="share(lesson.title)"
+                  class="p-1.5 text-primary hover:bg-surface-container rounded-lg"
+                >
+                  <span class="material-symbols-outlined text-[18px]">share</span>
+                </button>
+                <button
+                  type="button"
+                  title="Remove"
+                  (click)="removeLesson(lesson)"
+                  class="p-1.5 text-error hover:bg-surface-container rounded-lg"
+                >
+                  <span class="material-symbols-outlined text-[18px]">delete</span>
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
+
+    <!-- Snippets -->
+    <section class="lg:col-span-4 space-y-4">
+      <h2 class="text-lg font-bold text-on-surface">Snippets</h2>
+      @if (snippets().length === 0) {
+        <app-empty-state icon="code" title="No saved snippets" />
+      } @else {
+        <div class="space-y-3">
+          @for (snippet of snippets(); track snippet.id) {
+            <div
+              class="group bg-surface-container-lowest border border-surface-variant rounded-2xl p-4 transition-all duration-200"
+              [class.opacity-0]="isRemoving(snippet.id)"
+              [class.scale-95]="isRemoving(snippet.id)"
+            >
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <div>
+                  <p class="font-bold text-on-surface text-sm">{{ snippet.title }}</p>
+                  <p class="text-xs text-outline font-code">{{ snippet.filename }}</p>
+                </div>
+                <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                  <button
+                    type="button"
+                    title="Share"
+                    (click)="share(snippet.title)"
+                    class="p-1 text-primary hover:bg-surface-container rounded-lg"
+                  >
+                    <span class="material-symbols-outlined text-[16px]">share</span>
+                  </button>
+                  <button
+                    type="button"
+                    title="Remove"
+                    (click)="removeSnippet(snippet)"
+                    class="p-1 text-error hover:bg-surface-container rounded-lg"
+                  >
+                    <span class="material-symbols-outlined text-[16px]">delete</span>
+                  </button>
+                </div>
+              </div>
+              <p class="font-code text-xs text-on-surface-variant bg-surface-container rounded-lg p-2 overflow-x-auto whitespace-nowrap">
+                {{ snippet.codePreview }}
+              </p>
+            </div>
+          }
+        </div>
+      }
+    </section>
+
+    <!-- Interview Questions -->
+    <section class="lg:col-span-12 space-y-4">
+      <h2 class="text-lg font-bold text-on-surface">Interview Questions</h2>
+      @if (questions().length === 0) {
+        <app-empty-state icon="quiz" title="No saved questions" />
+      } @else {
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          @for (question of questions(); track question.id) {
+            <div
+              class="group bg-surface-container-lowest border border-surface-variant rounded-2xl p-4 transition-all duration-200"
+              [class.opacity-0]="isRemoving(question.id)"
+              [class.scale-95]="isRemoving(question.id)"
+            >
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <app-pill [label]="difficultyMeta(question).label" [color]="difficultyMeta(question).color" />
+                <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                  <button
+                    type="button"
+                    title="Share"
+                    (click)="share(question.title)"
+                    class="p-1 text-primary hover:bg-surface-container rounded-lg"
+                  >
+                    <span class="material-symbols-outlined text-[16px]">share</span>
+                  </button>
+                  <button
+                    type="button"
+                    title="Remove"
+                    (click)="removeQuestion(question)"
+                    class="p-1 text-error hover:bg-surface-container rounded-lg"
+                  >
+                    <span class="material-symbols-outlined text-[16px]">delete</span>
+                  </button>
+                </div>
+              </div>
+              <h3 class="font-bold text-on-surface mb-1">{{ question.title }}</h3>
+              <p class="text-sm text-on-surface-variant mb-2">{{ question.description }}</p>
+              <p class="text-xs text-outline">Last viewed {{ question.lastViewedLabel }}</p>
+            </div>
+          }
+        </div>
+      }
+    </section>
+  </div>
+</div>

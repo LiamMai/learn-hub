@@ -1,0 +1,51 @@
+<div class="px-4 space-y-6">
+  <div>
+    <h1 class="text-xl font-bold text-on-surface">Welcome back, Developer</h1>
+    <p class="text-sm text-on-surface-variant">Keep your streak going today.</p>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3">
+    @if (streak(); as s) {
+      <div class="bg-primary-container rounded-2xl p-4 text-on-primary-container">
+        <span class="material-symbols-outlined text-2xl">local_fire_department</span>
+        <p class="text-xs font-bold uppercase mt-1">Daily Streak</p>
+        <p class="text-xl font-black">{{ s.days }} Days</p>
+      </div>
+    }
+    <div class="bg-surface-container-lowest border border-surface-variant rounded-2xl p-4">
+      <span class="material-symbols-outlined text-2xl text-primary">trending_up</span>
+      <p class="text-xs font-bold uppercase mt-1 text-outline">Progress</p>
+      <p class="text-xl font-black text-on-surface">{{ progress() }}%</p>
+    </div>
+  </div>
+
+  <button type="button" class="w-full bg-primary text-on-primary py-3 rounded-xl font-bold flex items-center justify-center gap-2">
+    <span class="material-symbols-outlined">bolt</span>
+    Start Daily Challenge
+  </button>
+
+  <section class="space-y-3">
+    <h2 class="font-bold text-on-surface">Recommended for You</h2>
+    @for (course of recommended(); track course.id) {
+      <app-course-card
+        [title]="course.title"
+        [description]="course.description"
+        [categoryLabel]="course.categoryLabel"
+        [categoryColor]="course.categoryColor"
+        [meta]="course.durationLabel + ' · ' + course.difficultyLabel"
+      />
+    }
+  </section>
+
+  <section class="bg-surface-container-lowest border border-surface-variant rounded-2xl p-4 space-y-3">
+    <h2 class="font-bold text-on-surface">Daily Tasks</h2>
+    @for (task of dailyTasks(); track task.id) {
+      <app-checklist-item
+        [label]="task.label"
+        [meta]="task.meta"
+        [checked]="task.done"
+        (toggled)="toggleTask(task.id)"
+      />
+    }
+  </section>
+</div>

@@ -11,7 +11,9 @@
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
     "docker:down:v": "docker compose down -v",
-    "docker:logs": "docker compose logs -f mongo"
+    "docker:logs": "docker compose logs -f mongo",
+    "reset": "pkill -f 'nx serve' 2>/dev/null; pkill -f 'webpack' 2>/dev/null; lsof -ti:3000 2>/dev/null | xargs kill -9 2>/dev/null; lsof -ti:4200 2>/dev/null | xargs kill -9 2>/dev/null; pnpm exec nx reset",
+    "start:local": "pnpm run reset && pnpm run start"
   },
   "private": true,
   "packageManager": "pnpm@10.5.2",
@@ -40,11 +42,14 @@
     "@types/node": "^24.0.0",
     "@typescript-eslint/utils": "^8.58.0",
     "angular-eslint": "^22.0.0",
+    "autoprefixer": "^10.5.4",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^10.0.0",
     "jsdom": "^27.1.0",
     "nx": "23.1.0",
+    "postcss": "^8.5.23",
     "prettier": "^3.8.1",
+    "tailwindcss": "^3",
     "tslib": "^2.3.0",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.58.0",
@@ -54,6 +59,7 @@
     "webpack-dev-server": "^5.2.1"
   },
   "dependencies": {
+    "@angular/cdk": "^22.0.6",
     "@angular/common": "~22.0.4",
     "@angular/compiler": "~22.0.4",
     "@angular/core": "~22.0.4",

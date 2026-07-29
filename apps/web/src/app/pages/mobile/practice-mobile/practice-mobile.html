@@ -1,0 +1,48 @@
+@if (challenge(); as ch) {
+  <div class="px-4 space-y-5">
+    <div>
+      <span class="text-xs font-bold uppercase px-2 py-0.5 rounded-full bg-primary-container/20 text-primary">
+        Practice Challenge
+      </span>
+      <h1 class="text-lg font-bold text-on-surface mt-2">{{ ch.title }}</h1>
+      <p class="text-sm text-on-surface-variant">{{ ch.topicLabel }}</p>
+    </div>
+
+    <div class="bg-surface-container-lowest border border-surface-variant rounded-2xl p-4 space-y-2">
+      <p class="text-xs font-bold uppercase text-outline">Requirements</p>
+      @for (req of ch.requirements; track req; let i = $index) {
+        <button
+          type="button"
+          (click)="toggleRequirement(i)"
+          class="w-full flex items-start gap-2 text-left"
+        >
+          <span
+            class="material-symbols-outlined text-[18px] mt-0.5"
+            [class.text-primary]="done()[i]"
+            [class.text-secondary]="!done()[i]"
+          >
+            {{ done()[i] ? 'check_circle' : 'radio_button_unchecked' }}
+          </span>
+          <span class="text-sm text-on-surface" [class.opacity-60]="done()[i]">{{ req }}</span>
+        </button>
+      }
+    </div>
+
+    <div class="rounded-xl overflow-hidden border border-outline-variant">
+      <div class="flex items-center gap-2 px-3 py-2 bg-surface-container-high">
+        <span class="material-symbols-outlined text-[16px]">terminal</span>
+        <span class="text-xs font-code text-on-surface-variant">APP.JS</span>
+      </div>
+      <pre class="m-0 p-3 bg-surface-container-lowest overflow-x-auto"><code class="font-code text-xs text-on-surface">{{ ch.starterCode }}<span class="inline-block w-1.5 h-3 bg-primary animate-pulse align-middle"></span></code></pre>
+    </div>
+
+    <div class="flex gap-2 pb-2">
+      <button type="button" class="flex-1 py-2.5 rounded-xl border border-outline-variant font-bold text-sm">
+        Run Code
+      </button>
+      <button type="button" class="flex-1 py-2.5 rounded-xl bg-primary text-on-primary font-bold text-sm">
+        Submit Task
+      </button>
+    </div>
+  </div>
+}

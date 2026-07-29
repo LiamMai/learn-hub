@@ -1,0 +1,24 @@
+<div class="px-4 space-y-5">
+  <div>
+    <h1 class="text-xl font-bold text-on-surface">Interview Hub</h1>
+    <p class="text-sm text-on-surface-variant">Practice real questions on the go.</p>
+  </div>
+
+  <app-filter-chip-group [options]="filterOptions" [(selected)]="selectedFilter" />
+
+  @if (loading()) {
+    <p class="text-on-surface-variant text-sm">Loading&hellip;</p>
+  } @else if (filtered().length === 0) {
+    <app-empty-state icon="quiz" title="No questions match this filter" />
+  } @else {
+    <div class="space-y-3">
+      @for (q of filtered(); track q._id) {
+        <div class="bg-surface-container-lowest border border-surface-variant rounded-2xl p-4 space-y-2">
+          <app-pill [label]="difficultyMeta(q).label" [color]="difficultyMeta(q).color" />
+          <h3 class="font-bold text-on-surface">{{ q.question }}</h3>
+          <p class="text-sm text-on-surface-variant line-clamp-2">{{ q.answer }}</p>
+        </div>
+      }
+    </div>
+  }
+</div>

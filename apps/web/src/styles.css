@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Design tokens — single canonical scheme (see .claude/plans, "Design tokens").
+ * The source Stitch mockups had 3 conflicting token schemes across screens
+ * (different spacing units, a dark-mode radius bug). Collapsed to one scheme
+ * here as CSS custom properties, mapped onto semantic Tailwind color/font
+ * names in tailwind.config.js. Dark mode is a plain CSS custom-property
+ * override on .dark, so every utility built on these tokens respects the
+ * theme automatically without a `dark:` prefix on each one.
+ */
+:root {
+  --color-primary: #004ac6;
+  --color-primary-container: #2563eb;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #eeefff;
+  --color-secondary: #565e74;
+  --color-secondary-container: #dae2fd;
+  --color-on-secondary-container: #5c647a;
+  --color-background: #f7f9fb;
+  --color-surface: #f7f9fb;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f2f4f6;
+  --color-surface-container: #eceef0;
+  --color-surface-container-high: #e6e8ea;
+  --color-surface-container-highest: #e0e3e5;
+  --color-surface-variant: #e0e3e5;
+  --color-on-surface: #191c1e;
+  --color-on-surface-variant: #434655;
+  --color-outline: #737686;
+  --color-outline-variant: #c3c6d7;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+
+  --cat-angular: #dd0031;
+  --cat-nestjs: #e0234e;
+  --cat-mongodb: #47a248;
+  --cat-typescript: #3178c6;
+  --cat-javascript: #f0db4f;
+  --cat-react: #61dafb;
+  --cat-vue: #42b883;
+  --cat-nextjs: #000000;
+  --cat-nodejs: #339933;
+
+  color-scheme: light;
+}
+
+.dark {
+  --color-primary: #adc6ff;
+  --color-primary-container: #2f5db3;
+  --color-on-primary: #00297a;
+  --color-on-primary-container: #dbe1ff;
+  --color-secondary: #bec6e0;
+  --color-secondary-container: #3f465c;
+  --color-on-secondary-container: #dae2fd;
+  --color-background: #0e1416;
+  --color-surface: #0e1416;
+  --color-surface-container-lowest: #090f11;
+  --color-surface-container-low: #191c1e;
+  --color-surface-container: #1d2022;
+  --color-surface-container-high: #272a2d;
+  --color-surface-container-highest: #323538;
+  --color-surface-variant: #434655;
+  --color-on-surface: #e1e2e4;
+  --color-on-surface-variant: #c3c6d7;
+  --color-outline: #8d909f;
+  --color-outline-variant: #434655;
+  --color-error: #ffb4ab;
+  --color-on-error: #690005;
+  --color-error-container: #93000a;
+
+  --cat-nextjs: #ffffff;
+
+  color-scheme: dark;
+}
+
+body {
+  @apply font-body;
+  margin: 0;
+  background: var(--color-background);
+  color: var(--color-on-surface);
+  -webkit-font-smoothing: antialiased;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

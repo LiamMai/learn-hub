@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { NxWelcome } from './nx-welcome';
+import { RouterOutlet } from '@angular/router';
+import { Toast } from './ui/toast/toast';
+import { ConfirmDialog } from './ui/confirm-dialog/confirm-dialog';
 
 @Component({
-  imports: [NxWelcome, RouterModule],
+  imports: [RouterOutlet, Toast, ConfirmDialog],
   selector: 'app-root',
-  templateUrl: './app.html',
-  styleUrl: './app.scss',
+  template: `
+    <router-outlet></router-outlet>
+    <app-toast></app-toast>
+    <app-confirm-dialog></app-confirm-dialog>
+  `,
 })
-export class App {
-  protected title = 'web';
-}
+export class App {}

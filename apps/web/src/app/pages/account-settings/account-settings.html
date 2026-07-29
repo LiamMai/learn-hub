@@ -1,0 +1,164 @@
+<div class="p-8 max-w-[1000px] mx-auto w-full space-y-8">
+  <div>
+    <h1 class="text-2xl font-bold text-on-surface">Account Settings</h1>
+    <p class="text-on-surface-variant text-sm">Manage your profile, security, and preferences.</p>
+  </div>
+
+  <!-- Profile -->
+  <form
+    [formGroup]="profileForm"
+    (ngSubmit)="saveProfile()"
+    class="bg-surface-container-lowest border border-surface-variant rounded-2xl p-6 space-y-4"
+  >
+    <div class="flex items-center gap-4">
+      <div
+        class="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container text-xl font-bold"
+      >
+        D
+      </div>
+      <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="fullName" class="block text-xs font-bold text-on-surface-variant mb-1.5">Full Name</label>
+          <input
+            id="fullName"
+            formControlName="fullName"
+            class="w-full px-3 py-2 bg-surface-container rounded-xl border-none focus:ring-2 focus:ring-primary text-sm"
+          />
+        </div>
+        <div>
+          <label for="publicTitle" class="block text-xs font-bold text-on-surface-variant mb-1.5">Public Title</label>
+          <input
+            id="publicTitle"
+            formControlName="publicTitle"
+            class="w-full px-3 py-2 bg-surface-container rounded-xl border-none focus:ring-2 focus:ring-primary text-sm"
+          />
+        </div>
+      </div>
+    </div>
+    <div>
+      <label for="bio" class="block text-xs font-bold text-on-surface-variant mb-1.5">Bio</label>
+      <textarea
+        id="bio"
+        formControlName="bio"
+        rows="2"
+        class="w-full px-3 py-2 bg-surface-container rounded-xl border-none focus:ring-2 focus:ring-primary text-sm resize-none"
+      ></textarea>
+    </div>
+    <button type="submit" class="bg-primary text-on-primary px-4 py-2 rounded-xl font-bold text-sm">
+      Save Changes
+    </button>
+  </form>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- Security -->
+    <section class="lg:col-span-7 bg-surface-container-lowest border border-surface-variant rounded-2xl p-6 space-y-4">
+      <h2 class="font-bold text-on-surface">Account &amp; Security</h2>
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-bold text-on-surface">Email Address</p>
+          <p class="text-xs text-outline">dev&#64;devhub.io</p>
+        </div>
+        <button type="button" class="text-sm text-primary font-bold hover:underline">Change</button>
+      </div>
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-bold text-on-surface">Password</p>
+          <p class="text-xs text-outline">Last changed 3 months ago</p>
+        </div>
+        <button type="button" class="text-sm text-primary font-bold hover:underline">Reset</button>
+      </div>
+      <div class="flex items-center justify-between">
+        <p class="text-sm font-bold text-on-surface">Two-Factor Authentication</p>
+        <app-toggle
+          [checked]="preferencesService.preferences().twoFactorAuth"
+          (checkedChange)="setPreference('twoFactorAuth', $event)"
+        />
+      </div>
+    </section>
+
+    <!-- Plan -->
+    <section class="lg:col-span-5 bg-primary-container/10 border border-primary-container rounded-2xl p-6 space-y-3">
+      <span class="text-xs font-bold uppercase px-2 py-0.5 rounded-full bg-primary text-on-primary">
+        Active Plan
+      </span>
+      <h2 class="font-bold text-lg text-on-surface">Pro Member</h2>
+      <p class="text-xs text-outline">Renews Jan 12, 2027</p>
+      <ul class="text-sm text-on-surface-variant space-y-1">
+        <li class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[16px] text-primary">check</span>
+          Unlimited Practice Labs
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[16px] text-primary">check</span>
+          Mock Interview Simulator
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[16px] text-primary">check</span>
+          Priority Support
+        </li>
+      </ul>
+      <button type="button" class="w-full bg-primary text-on-primary py-2 rounded-xl font-bold text-sm">
+        Manage Subscription
+      </button>
+    </section>
+  </div>
+
+  <!-- App Preferences -->
+  <section class="bg-surface-container-lowest border border-surface-variant rounded-2xl p-6">
+    <h2 class="font-bold text-on-surface mb-4">App Preferences</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="space-y-4">
+        <p class="text-xs font-bold uppercase text-outline">Appearance</p>
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-on-surface">Dark Mode</p>
+          <app-toggle
+            [checked]="themeService.theme() === 'dark'"
+            (checkedChange)="themeService.set($event ? 'dark' : 'light')"
+          />
+        </div>
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-on-surface">Reduced Motion</p>
+          <app-toggle
+            [checked]="preferencesService.preferences().reducedMotion"
+            (checkedChange)="setPreference('reducedMotion', $event)"
+          />
+        </div>
+      </div>
+      <div class="space-y-4">
+        <p class="text-xs font-bold uppercase text-outline">Notifications</p>
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-on-surface">Email Digests</p>
+          <app-toggle
+            [checked]="preferencesService.preferences().emailDigests"
+            (checkedChange)="setPreference('emailDigests', $event)"
+          />
+        </div>
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-on-surface">Course Announcements</p>
+          <app-toggle
+            [checked]="preferencesService.preferences().courseAnnouncements"
+            (checkedChange)="setPreference('courseAnnouncements', $event)"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Danger Zone -->
+  <section class="border border-error/40 rounded-2xl p-6 flex items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-error">warning</span>
+      <div>
+        <p class="font-bold text-on-surface">Delete Account</p>
+        <p class="text-xs text-on-surface-variant">Permanently remove your account and all data.</p>
+      </div>
+    </div>
+    <button
+      type="button"
+      (click)="deleteAccount()"
+      class="border border-error text-error px-4 py-2 rounded-xl font-bold text-sm shrink-0"
+    >
+      Delete Account
+    </button>
+  </section>
+</div>

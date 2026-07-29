@@ -1,0 +1,56 @@
+<div class="p-8 max-w-[1200px] mx-auto w-full space-y-8">
+  <div class="flex items-center gap-2 text-sm text-outline">
+    <a routerLink="/" class="hover:text-primary transition-colors">Home</a>
+    <span>/</span>
+    <span class="text-on-surface font-bold">Learn</span>
+  </div>
+
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-on-surface">Learn</h1>
+      <p class="text-on-surface-variant text-sm">
+        Browse frameworks and languages, tracked by real progress.
+      </p>
+    </div>
+    <div class="relative w-full sm:w-72">
+      <span
+        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]"
+        >search</span
+      >
+      <input
+        class="w-full pl-10 pr-4 py-2 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary transition-all text-sm"
+        placeholder="Search frameworks..."
+        type="text"
+        [value]="search()"
+        (input)="onSearch($any($event.target).value)"
+      />
+    </div>
+  </div>
+
+  <app-filter-chip-group [options]="filterOptions()" [(selected)]="selectedFilter" />
+
+  @if (loading()) {
+    <p class="text-on-surface-variant">Loading frameworks&hellip;</p>
+  } @else if (error()) {
+    <p class="text-error">{{ error() }}</p>
+  } @else if (cards().length === 0) {
+    <app-empty-state
+      icon="search_off"
+      title="No frameworks match your filters"
+      description="Try a different search term or filter."
+    />
+  } @else {
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for (card of cards(); track card.id) {
+        <a [routerLink]="card.routerLink" class="block" [class.opacity-70]="!card.isReal">
+          <app-course-card
+            [title]="card.title"
+            [description]="card.description"
+            [categoryLabel]="card.categoryLabel"
+            [categoryColor]="card.categoryColor"
+          />
+        </a>
+      }
+    </div>
+  }
+</div>

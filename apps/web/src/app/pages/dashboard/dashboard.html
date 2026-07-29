@@ -1,0 +1,140 @@
+<div class="p-8 max-w-[1200px] mx-auto w-full space-y-8">
+  <!-- Hero -->
+  <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div
+      class="lg:col-span-2 relative overflow-hidden bg-primary-container rounded-[2rem] p-8 text-on-primary-container flex flex-col justify-between min-h-[220px]"
+    >
+      <div class="relative z-10">
+        <h1 class="text-3xl font-bold mb-2">Welcome back, Developer</h1>
+        <p class="opacity-90 max-w-md">
+          You're on fire! Keep the momentum going and complete your daily challenge.
+        </p>
+      </div>
+      @if (streak(); as s) {
+        <div class="flex items-center gap-4 relative z-10">
+          <div class="bg-white/20 backdrop-blur-md px-4 py-2 rounded-2xl flex items-center gap-2">
+            <span class="material-symbols-outlined text-3xl">local_fire_department</span>
+            <div>
+              <p class="text-xs uppercase font-bold tracking-wider">Daily Streak</p>
+              <p class="text-2xl font-black leading-none">{{ s.days }} days</p>
+            </div>
+          </div>
+          <div class="h-10 w-px bg-white/20"></div>
+          <p class="text-sm font-medium">{{ s.percentileLabel }}</p>
+        </div>
+      }
+    </div>
+
+    @if (continueLearning(); as cl) {
+      <div
+        class="bg-surface-container-lowest border border-surface-variant rounded-[2rem] p-6 flex flex-col justify-between hover:shadow-xl transition-all"
+      >
+        <div>
+          <div class="flex justify-between items-start mb-3">
+            <span
+              class="bg-primary-container/20 text-primary px-2.5 py-1 rounded-lg text-xs font-bold uppercase"
+              >Continue Learning</span
+            >
+            <span class="material-symbols-outlined text-outline">play_circle</span>
+          </div>
+          <h3 class="text-xl font-bold mb-1">{{ cl.title }}</h3>
+          <p class="text-on-surface-variant text-sm">{{ cl.subtitle }}</p>
+        </div>
+        <div class="space-y-2 mt-6">
+          <app-progress-bar [value]="cl.progress" />
+          <div class="flex justify-between text-xs font-bold text-outline">
+            <span>{{ cl.progress }}% Completed</span>
+            <span>{{ cl.lessonsLeft }} Lessons Left</span>
+          </div>
+        </div>
+      </div>
+    }
+  </section>
+
+  <!-- Stat grid -->
+  <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    @for (stat of stats(); track stat.label) {
+      <app-stat-card
+        [label]="stat.label"
+        [value]="stat.value"
+        [icon]="stat.icon"
+        [trendLabel]="stat.trendLabel"
+      />
+    }
+  </section>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Left/main column -->
+    <div class="lg:col-span-2 space-y-8">
+      <section>
+        <div class="flex justify-between items-end mb-4">
+          <h2 class="text-xl font-bold text-on-surface">Recommended for You</h2>
+          <a routerLink="/learn" class="text-primary font-bold text-sm hover:underline">View All</a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          @for (course of recommended(); track course.id) {
+            <app-course-card
+              [title]="course.title"
+              [description]="course.description"
+              [categoryLabel]="course.categoryLabel"
+              [categoryColor]="course.categoryColor"
+              [meta]="course.durationLabel + ' · ' + course.difficultyLabel"
+            />
+          }
+        </div>
+      </section>
+
+      <section class="bg-surface-container-lowest border border-surface-variant rounded-[2rem] p-6">
+        <div class="flex justify-between items-center mb-6">
+          <div>
+            <h2 class="text-xl font-bold text-on-surface">Learning Consistency</h2>
+            <p class="text-on-surface-variant text-sm">Your activity over the last 12 weeks</p>
+          </div>
+        </div>
+        <app-activity-heatmap [cells]="heatmap()" />
+      </section>
+    </div>
+
+    <!-- Right sidebar -->
+    <div class="space-y-8">
+      <section class="bg-surface-container-lowest border border-surface-variant rounded-[2rem] p-6">
+        <h2 class="text-lg font-bold mb-4">Daily Tasks</h2>
+        <div class="space-y-4">
+          @for (task of dailyTasks(); track task.id) {
+            <app-checklist-item
+              [label]="task.label"
+              [meta]="task.meta"
+              [checked]="task.done"
+              (toggled)="toggleTask(task.id)"
+            />
+          }
+        </div>
+      </section>
+
+      <section class="bg-surface-container-lowest border border-surface-variant rounded-[2rem] p-6">
+        <h2 class="text-lg font-bold mb-4">Weekly League</h2>
+        <div class="space-y-3">
+          @for (entry of leaderboard(); track entry.rank) {
+            <div
+              class="flex items-center justify-between"
+              [class.p-2]="entry.isYou"
+              [class.-mx-2]="entry.isYou"
+              [class.rounded-xl]="entry.isYou"
+              [class.bg-primary-container]="entry.isYou"
+              [class.bg-opacity-10]="entry.isYou"
+            >
+              <div class="flex items-center gap-3">
+                <span class="text-sm font-black text-outline w-4">{{ entry.rank }}</span>
+                <div class="w-8 h-8 rounded-full bg-secondary-container"></div>
+                <p class="text-sm font-bold" [class.text-primary]="entry.isYou">
+                  {{ entry.name }}
+                </p>
+              </div>
+              <span class="text-xs font-black text-primary">{{ entry.xp }} XP</span>
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
