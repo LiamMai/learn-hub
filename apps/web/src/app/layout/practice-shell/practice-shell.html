@@ -14,15 +14,18 @@
         type="text"
       />
     </div>
-    <button
-      type="button"
-      (click)="themeService.toggle()"
-      class="p-2 text-on-surface-variant hover:text-primary transition-all"
-    >
-      <span class="material-symbols-outlined">
-        {{ themeService.theme() === 'dark' ? 'light_mode' : 'dark_mode' }}
-      </span>
-    </button>
+    <div class="flex items-center gap-2 shrink-0">
+      <button
+        type="button"
+        (click)="themeService.toggle()"
+        class="p-2 text-on-surface-variant hover:text-primary transition-all"
+      >
+        <span class="material-symbols-outlined">
+          {{ themeService.theme() === 'dark' ? 'light_mode' : 'dark_mode' }}
+        </span>
+      </button>
+      <app-user-menu [showName]="false" />
+    </div>
   </header>
 
   <div class="flex-1 flex overflow-hidden relative">

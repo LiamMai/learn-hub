@@ -9,11 +9,11 @@ import { GoogleIdentityService } from '../../services/google-identity.service';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-sign-up',
   imports: [ReactiveFormsModule, RouterLink],
-  templateUrl: './login.html',
+  templateUrl: './sign-up.html',
 })
-export class Login {
+export class SignUp {
   private readonly router = inject(Router);
   private readonly toastService = inject(ToastService);
   private readonly authService = inject(AuthService);
@@ -24,16 +24,16 @@ export class Login {
   protected readonly showPassword = signal(false);
 
   protected readonly form = new FormGroup({
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
     password: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(8)] }),
-    remember: new FormControl(false, { nonNullable: true }),
   });
 
   protected togglePasswordVisibility(): void {
     this.showPassword.update((v) => !v);
   }
 
-  protected async onGoogleSignIn(): Promise<void> {
+  protected async onGoogleSignUp(): Promise<void> {
     try {
       const { clientId } = await firstValueFrom(this.authService.getGoogleClientId());
       const accessToken = await this.googleIdentityService.requestAccessToken(clientId);
@@ -43,13 +43,13 @@ export class Login {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
-            this.toastService.show('Login successful! Redirecting to Dashboard...', 'success');
+            this.toastService.show('Account created! Redirecting to Dashboard...', 'success');
             this.router.navigate(['/']);
           },
-          error: () => this.toastService.show('Google sign-in failed', 'error'),
+          error: () => this.toastService.show('Google sign-up failed', 'error'),
         });
     } catch {
-      this.toastService.show('Google sign-in failed', 'error');
+      this.toastService.show('Google sign-up failed', 'error');
     }
   }
 
@@ -60,19 +60,19 @@ export class Login {
     }
     this.submitting.set(true);
 
-    const { email, password } = this.form.getRawValue();
+    const { name, email, password } = this.form.getRawValue();
     this.authService
-      .signIn({ email, password })
+      .signUp({ name, email, password })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.submitting.set(false);
-          this.toastService.show('Login successful! Redirecting to Dashboard...', 'success');
+          this.toastService.show('Account created! Redirecting to Dashboard...', 'success');
           this.router.navigate(['/']);
         },
         error: (err: HttpErrorResponse) => {
           this.submitting.set(false);
-          this.toastService.show(err.error?.message ?? 'Email or password is incorrect', 'error');
+          this.toastService.show(err.error?.message ?? 'Could not create account', 'error');
         },
       });
   }

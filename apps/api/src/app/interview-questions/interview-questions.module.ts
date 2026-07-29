@@ -6,14 +6,17 @@ import {
   InterviewQuestion,
   InterviewQuestionSchema,
 } from './entities/interview-question.entity';
+import { AuthGuard } from '../auth/auth.guard';
+import { KeyTokenModule } from '../auth/key-token.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: InterviewQuestion.name, schema: InterviewQuestionSchema },
     ]),
+    KeyTokenModule,
   ],
   controllers: [InterviewQuestionsController],
-  providers: [InterviewQuestionsService],
+  providers: [InterviewQuestionsService, AuthGuard],
 })
 export class InterviewQuestionsModule {}

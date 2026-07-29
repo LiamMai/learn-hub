@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 import {
   CreateInterviewQuestion,
   InterviewQuestion,
@@ -9,7 +10,7 @@ import {
 @Injectable({ providedIn: 'root' })
 export class InterviewQuestionsService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = '/api/interview-questions';
+  private readonly baseUrl = `${environment.apiUrl}/interview-questions`;
 
   getAll(conceptId?: string): Observable<InterviewQuestion[]> {
     const params = conceptId

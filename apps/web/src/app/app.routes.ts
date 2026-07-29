@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { authGuard } from './guards/auth.guard';
 
 export const appRoutes: Route[] = [
   {
@@ -6,7 +7,12 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./pages/login/login').then((m) => m.Login),
   },
   {
+    path: 'sign-up',
+    loadComponent: () => import('./pages/sign-up/sign-up').then((m) => m.SignUp),
+  },
+  {
     path: 'topics',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./layout/topics-shell/topics-shell').then((m) => m.TopicsShell),
     children: [
@@ -21,6 +27,7 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'bookmarks',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./layout/topics-shell/topics-shell').then((m) => m.TopicsShell),
     children: [
@@ -32,6 +39,7 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'practice',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./layout/practice-shell/practice-shell').then((m) => m.PracticeShell),
     children: [
@@ -43,6 +51,7 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'm',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./layout/mobile-shell/mobile-shell').then((m) => m.MobileShell),
     children: [
@@ -76,6 +85,7 @@ export const appRoutes: Route[] = [
   },
   {
     path: '',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./layout/dashboard-shell/dashboard-shell').then(
         (m) => m.DashboardShell,

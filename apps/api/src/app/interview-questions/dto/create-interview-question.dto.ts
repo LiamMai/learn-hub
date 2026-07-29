@@ -5,7 +5,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { Difficulty } from '../entities/concept.entity';
+import { Difficulty } from '../../concepts/entities/concept.entity';
 
 export class CreateInterviewQuestionDto {
   @IsMongoId()

@@ -1,14 +1,22 @@
 import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
+import axios from 'axios';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import * as jwt from 'jsonwebtoken';
 import { Model } from 'mongoose';
-import { SignInDto } from '../dto/sign-in.dto';
-import { SignUpDto } from '../dto/sign-up.dto';
-import { KeyToken, KeyTokenDocument } from '../entities/key-token.entity';
-import { User, UserDocument } from '../entities/user.entity';
+import { SignInDto } from './dto/sign-in.dto';
+import { SignUpDto } from './dto/sign-up.dto';
+import { KeyToken, KeyTokenDocument } from './entities/key-token.entity';
+import { User, UserDocument } from './entities/user.entity';
 import { parseObjectId } from '../utils/parse-object-id';
+
+interface GoogleUserInfo {
+  sub: string;
+  email: string;
+  name: string;
+}
 
 export interface JwtPayload {
   userId: string;
@@ -27,6 +35,7 @@ export class AuthService {
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     @InjectModel(KeyToken.name)
     private readonly keyTokenModel: Model<KeyTokenDocument>,
+    private readonly configService: ConfigService,
   ) {}
 
   private generateKeyPair() {
@@ -64,6 +73,23 @@ export class AuthService {
     };
   }
 
+  private async issueSession(user: UserDocument) {
+    const { publicKey, privateKey } = this.generateKeyPair();
+    const tokens = this.createTokenPair(
+      { userId: user._id.toString(), email: user.email, roles: user.roles },
+      publicKey,
+      privateKey,
+    );
+
+    await this.keyTokenModel.findOneAndUpdate(
+      { user: user._id },
+      { publicKey, privateKey, refreshToken: tokens.refreshToken, refreshTokenUsed: [] },
+      { upsert: true },
+    );
+
+    return { user: this.pickUser(user), ...tokens };
+  }
+
   async signUp(dto: SignUpDto) {
     const existing = await this.userModel.findOne({ email: dto.email });
     if (existing) {
@@ -96,7 +122,7 @@ export class AuthService {
 
   async login(dto: SignInDto) {
     const user = await this.userModel.findOne({ email: dto.email });
-    if (!user) {
+    if (!user?.password) {
       throw new UnauthorizedException('Email or password is incorrect');
     }
 
@@ -105,20 +131,39 @@ export class AuthService {
       throw new UnauthorizedException('Email or password is incorrect');
     }
 
-    const { publicKey, privateKey } = this.generateKeyPair();
-    const tokens = this.createTokenPair(
-      { userId: user._id.toString(), email: user.email, roles: user.roles },
-      publicKey,
-      privateKey,
-    );
+    return this.issueSession(user);
+  }
 
-    await this.keyTokenModel.findOneAndUpdate(
-      { user: user._id },
-      { publicKey, privateKey, refreshToken: tokens.refreshToken, refreshTokenUsed: [] },
-      { upsert: true },
-    );
+  async loginWithGoogle(accessToken: string) {
+    let profile: GoogleUserInfo;
+    try {
+      const response = await axios.get<GoogleUserInfo>(
+        'https://www.googleapis.com/oauth2/v3/userinfo',
+        { headers: { Authorization: `Bearer ${accessToken}` } },
+      );
+      profile = response.data;
+    } catch {
+      throw new UnauthorizedException('Invalid Google access token');
+    }
 
-    return { user: this.pickUser(user), ...tokens };
+    let user = await this.userModel.findOne({ email: profile.email });
+    if (!user) {
+      user = await this.userModel.create({
+        name: profile.name,
+        email: profile.email,
+        provider: 'google',
+        googleId: profile.sub,
+      });
+    } else if (!user.googleId) {
+      user.googleId = profile.sub;
+      await user.save();
+    }
+
+    return this.issueSession(user);
+  }
+
+  getGoogleClientId() {
+    return this.configService.get<string>('GOOGLE_CLIENT_ID');
   }
 
   async refreshToken(userId: string, refreshToken: string) {

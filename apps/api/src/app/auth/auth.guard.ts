@@ -8,7 +8,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import * as jwt from 'jsonwebtoken';
 import { Model } from 'mongoose';
-import { KeyToken, KeyTokenDocument } from '../entities/key-token.entity';
+import { KeyToken, KeyTokenDocument } from './entities/key-token.entity';
 import { parseObjectId } from '../utils/parse-object-id';
 import {
   ACCESS_TOKEN_HEADER,

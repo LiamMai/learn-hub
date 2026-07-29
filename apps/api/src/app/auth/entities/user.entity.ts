@@ -11,11 +11,17 @@ export class User {
   @Prop({ required: true, unique: true })
   email!: string;
 
-  @Prop({ required: true })
-  password!: string;
+  @Prop({ required: false })
+  password?: string;
 
   @Prop({ type: [String], default: ['user'] })
   roles!: string[];
+
+  @Prop({ type: String, enum: ['local', 'google'], default: 'local' })
+  provider!: 'local' | 'google';
+
+  @Prop()
+  googleId?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

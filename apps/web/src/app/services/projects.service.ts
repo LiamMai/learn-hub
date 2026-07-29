@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { CreateProject, Project } from '../models/project.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectsService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = '/api/projects';
+  private readonly baseUrl = `${environment.apiUrl}/projects`;
 
   getAll(): Observable<Project[]> {
     return this.http.get<Project[]>(this.baseUrl);

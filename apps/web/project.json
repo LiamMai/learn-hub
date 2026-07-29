@@ -6,10 +6,17 @@
   "sourceRoot": "apps/web/src",
   "tags": [],
   "targets": {
+    "generate-env": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node apps/web/scripts/generate-env.js"
+      }
+    },
     "build": {
       "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
+      "dependsOn": ["generate-env"],
       "options": {
         "outputPath": "dist/apps/web",
         "browser": "apps/web/src/main.ts",
@@ -37,7 +44,13 @@
               "maximumError": "8kb"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "fileReplacements": [
+            {
+              "replace": "apps/web/src/environments/environment.ts",
+              "with": "apps/web/src/environments/environment.prod.ts"
+            }
+          ]
         },
         "development": {
           "optimization": false,
@@ -50,6 +63,7 @@
       "continuous": true,
       "executor": "@angular/build:dev-server",
       "defaultConfiguration": "development",
+      "dependsOn": ["generate-env"],
       "options": {
         "proxyConfig": "apps/web/proxy.conf.json"
       },

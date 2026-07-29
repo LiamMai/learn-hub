@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiHeader,
@@ -6,8 +6,9 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { SignInDto } from '../dto/sign-in.dto';
-import { SignUpDto } from '../dto/sign-up.dto';
+import { GoogleSignInDto } from './dto/google-sign-in.dto';
+import { SignInDto } from './dto/sign-in.dto';
+import { SignUpDto } from './dto/sign-up.dto';
 import { REFRESH_TOKEN_HEADER } from './auth-request';
 import type { AuthenticatedRequest } from './auth-request';
 import { AuthGuard } from './auth.guard';
@@ -32,6 +33,20 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Email or password is incorrect' })
   signIn(@Body() dto: SignInDto) {
     return this.authService.login(dto);
+  }
+
+  @Post('google')
+  @ApiOperation({ summary: 'Log in (or sign up) with a Google access token' })
+  @ApiResponse({ status: 201, description: 'Tokens issued' })
+  @ApiResponse({ status: 401, description: 'Invalid Google access token' })
+  googleSignIn(@Body() dto: GoogleSignInDto) {
+    return this.authService.loginWithGoogle(dto.accessToken);
+  }
+
+  @Get('google/client-id')
+  @ApiOperation({ summary: 'Get the Google OAuth client id for the frontend' })
+  getGoogleClientId() {
+    return { clientId: this.authService.getGoogleClientId() };
   }
 
   @Post('refresh-token')

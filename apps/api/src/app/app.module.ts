@@ -3,10 +3,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TopicsModule } from './topics.module';
-import { ConceptsModule } from './concepts.module';
-import { ProjectsModule } from './projects.module';
-import { InterviewQuestionsModule } from './interview-questions.module';
+import { TopicsModule } from './topics/topics.module';
+import { ConceptsModule } from './concepts/concepts.module';
+import { ProjectsModule } from './projects/projects.module';
+import { InterviewQuestionsModule } from './interview-questions/interview-questions.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { UserMenu } from '../../ui/user-menu/user-menu';
 
 interface MobileNavItem {
   label: string;
@@ -16,7 +17,7 @@ const MOBILE_NAV_ITEMS: MobileNavItem[] = [
 
 @Component({
   selector: 'app-mobile-shell',
-  imports: [RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, UserMenu],
   templateUrl: './mobile-shell.html',
 })
 export class MobileShell {

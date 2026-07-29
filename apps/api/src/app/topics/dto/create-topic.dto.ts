@@ -1,4 +1,11 @@
-import { IsArray, IsEnum, IsOptional, IsString, IsUrl } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsEnum,
+  IsOptional,
+  IsString,
+  IsUrl,
+} from 'class-validator';
 import { TopicCategory } from '../entities/topic.entity';
 
 export class CreateTopicDto {
@@ -15,4 +22,8 @@ export class CreateTopicDto {
   @IsString({ each: true })
   @IsOptional()
   tags?: string[];
+
+  @IsBoolean()
+  @IsOptional()
+  isPublic?: boolean;
 }

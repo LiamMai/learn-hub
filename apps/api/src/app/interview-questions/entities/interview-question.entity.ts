@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
-import { Difficulty } from './concept.entity';
+import { Difficulty } from '../../concepts/entities/concept.entity';
 
 export type InterviewQuestionDocument = HydratedDocument<InterviewQuestion>;
 
@@ -25,6 +25,12 @@ export class InterviewQuestion {
 
   @Prop({ type: [String], default: [] })
   followUps!: string[];
+
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  ownerId!: Types.ObjectId;
+
+  @Prop({ type: Boolean, default: false })
+  isPublic!: boolean;
 }
 
 export const InterviewQuestionSchema =

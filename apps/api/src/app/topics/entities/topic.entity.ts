@@ -24,6 +24,9 @@ export class Topic {
 
   @Prop({ type: [String], default: [] })
   tags!: string[];
+
+  @Prop({ type: Boolean, default: true })
+  isPublic!: boolean;
 }
 
 export const TopicSchema = SchemaFactory.createForClass(Topic);

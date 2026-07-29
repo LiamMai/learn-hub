@@ -33,6 +33,9 @@ export class Concept {
     default: Difficulty.BEGINNER,
   })
   difficulty!: Difficulty;
+
+  @Prop({ type: Boolean, default: true })
+  isPublic!: boolean;
 }
 
 export const ConceptSchema = SchemaFactory.createForClass(Concept);

@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { KeyTokenDocument } from '../entities/key-token.entity';
+import { KeyTokenDocument } from './entities/key-token.entity';
 
 export const REFRESH_TOKEN_HEADER = 'x-refresh-token';
 export const ACCESS_TOKEN_HEADER = 'authorization';

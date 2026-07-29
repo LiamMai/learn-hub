@@ -1,4 +1,10 @@
-import { IsEnum, IsMongoId, IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsEnum,
+  IsMongoId,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { Difficulty } from '../entities/concept.entity';
 
 export class CreateConceptDto {
@@ -21,4 +27,8 @@ export class CreateConceptDto {
 
   @IsEnum(Difficulty)
   difficulty!: Difficulty;
+
+  @IsBoolean()
+  @IsOptional()
+  isPublic?: boolean;
 }

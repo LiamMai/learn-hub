@@ -11,11 +11,11 @@
     <div class="bg-surface-container-lowest border border-surface-variant rounded-2xl p-6 space-y-5">
       <button
         type="button"
-        (click)="onGoogleSignIn()"
+        (click)="onGoogleSignUp()"
         class="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-outline-variant font-bold text-sm hover:bg-surface-container transition-colors"
       >
         <span class="material-symbols-outlined text-[18px]">login</span>
-        Login with Google
+        Sign up with Google
       </button>
 
       <div class="flex items-center gap-3">
@@ -25,6 +25,25 @@
       </div>
 
       <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-on-surface-variant mb-1.5" for="name">Full Name</label>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">
+              person
+            </span>
+            <input
+              id="name"
+              type="text"
+              formControlName="name"
+              class="w-full pl-10 pr-4 py-2.5 bg-surface-container rounded-xl border-none focus:ring-2 focus:ring-primary text-sm"
+              placeholder="Ada Lovelace"
+            />
+          </div>
+          @if (form.controls.name.invalid && form.controls.name.touched) {
+            <p class="text-xs text-error mt-1">Enter your name.</p>
+          }
+        </div>
+
         <div>
           <label class="block text-xs font-bold text-on-surface-variant mb-1.5" for="email">Work Email</label>
           <div class="relative">
@@ -45,10 +64,7 @@
         </div>
 
         <div>
-          <div class="flex items-center justify-between mb-1.5">
-            <label class="block text-xs font-bold text-on-surface-variant" for="password">Password</label>
-            <a routerLink="/coming-soon" class="text-xs text-primary hover:underline">Forgot Password?</a>
-          </div>
+          <label class="block text-xs font-bold text-on-surface-variant mb-1.5" for="password">Password</label>
           <div class="relative">
             <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">
               lock
@@ -75,24 +91,19 @@
           }
         </div>
 
-        <label class="flex items-center gap-2 text-sm text-on-surface-variant">
-          <input type="checkbox" formControlName="remember" class="rounded" />
-          Remember this device
-        </label>
-
         <button
           type="submit"
           [disabled]="submitting()"
           class="w-full bg-primary text-on-primary py-2.5 rounded-xl font-bold text-sm disabled:opacity-60 transition-all"
         >
-          {{ submitting() ? 'Authenticating...' : 'Continue to Dashboard' }}
+          {{ submitting() ? 'Creating account...' : 'Create account' }}
         </button>
       </form>
     </div>
 
     <p class="text-center text-sm text-on-surface-variant">
-      New to DevHub?
-      <a routerLink="/sign-up" class="text-primary font-bold hover:underline">Create an account</a>
+      Already have an account?
+      <a routerLink="/login" class="text-primary font-bold hover:underline">Log in</a>
     </p>
 
     <div class="flex items-center justify-center gap-4 text-xs text-outline opacity-70">
